@@ -1,0 +1,20 @@
+# Parents' Healthcare — per-host configuration
+# Scripts read their own section at runtime via hostname (see utilities/phc_config_loader.py).
+# Add a new machine by adding a new top-level key — no script changes needed.
+# No secrets here. Secrets live in ~/.config/phc/ (chmod 600).
+
+defaults:
+  # Values every host inherits unless overridden below.
+  repo_path: "myClaude/parents-healthcare"
+  log_level: "INFO"
+  patients:
+    - karen
+    - william
+    - marlene
+
+squall:
+  venv_path: "/home/cjferg/myClaude/parents-healthcare/utilities/venv"
+  nfs_mount: "/mnt/Claude"
+  nas_root: "/mnt/Claude/parents-healthcare"
+  secrets_dir: "/home/cjferg/.config/phc"
+  services: []   # phc-redactor.service once installed

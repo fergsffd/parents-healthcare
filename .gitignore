@@ -1,0 +1,36 @@
+# Sensitive documents never enter git.
+inbox/
+originals/
+processed/
+failed/
+
+# Document and image formats
+*.pdf
+*.PDF
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.png
+*.PNG
+*.heic
+*.HEIC
+*.tif*
+*.TIF*
+
+# Secrets
+.env
+*.env
+*secret*
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# OS cruft
+.DS_Store
+@eaDir/
