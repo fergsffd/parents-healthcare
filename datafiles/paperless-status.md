@@ -8,7 +8,7 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 | Sender | Account | CJ access | Paperless | Notes |
 |---|---|---|---|---|
 | Medicare.gov (MSNs) | — | — | — | MA enrollee: plan EOBs matter more than MSNs |
-| SummaCare (plan EOBs, notices) | — | — | — | Revisit if switching plans for 2027 |
+| SummaCare (plan EOBs, notices) | — | — | — | Paper EOB received (2026-02-25). Next: create SummaCare member portal account, add CJ as authorized rep, switch EOBs to electronic. Member Services 800-996-6250. Revisit if switching plans for 2027. |
 | Social Security (my Social Security) | — | — | — | |
 | USPS Informed Delivery (Toledo address) | — | — | n/a | Gives CJ visibility into mail arriving in Toledo |
 
