@@ -34,7 +34,7 @@ The full rules for handling an incoming document live in `project-instructions.m
 - When CJ or Debbie pay an out-of-pocket cost, flag it in `open-items.md` with "→ CoS" so it gets carried into Chief of Staff.
 
 ## Sync
-Not decided yet. Update this section once CJ chooses between a single git path and the CoS-style split. Either way, keep a manifest of which datafiles have changed since the last upload to Project Knowledge. Those uploads are manual: delete the old file, then upload the new one.
+Single git path (CJ chose this 2026-10-27): the deploy-key clone carries datafiles and scripts. `utilities/phc_knowledge_status.py` lists datafiles changed since the last Project Knowledge upload; `mark` records a new upload point in `knowledge-status.txt`. Uploads are manual: delete the old file, then upload the new one.
 
 ## Working style
 CJ is technically fluent and terse. Do the work, surface conclusions, and ask only when something is genuinely ambiguous. If it's unclear which patient a document belongs to, ask rather than guess. At the end of every session, list every file created or modified and every unit installed or changed.

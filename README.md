@@ -9,7 +9,7 @@ Fully separate from Chief of Staff (CoS): no shared repo, keys, folders, or serv
 ```
 parents-healthcare/
   datafiles/      karen.md william.md marlene.md providers.md paperless-status.md open-items.md
-  utilities/      phc_config_loader.py (redactor and sync scripts to come)
+  utilities/      phc_config_loader.py, phc_knowledge_status.py (redactor to come)
   services/       reference copies of systemd units (installed units: ~/.config/systemd/user)
   phc-config.yaml per-host config, no secrets
   project-instructions.md   rules for processing an incoming document
@@ -47,7 +47,9 @@ No Gists. Claude Code on Squall reads `processed/` from the NAS, updates `datafi
 
 ## Sync
 
-Not decided yet (single git path vs. CoS-style split). A manifest of datafiles changed since the last Project Knowledge upload will be kept either way.
+Single git path: the deploy-key clone carries both datafiles and scripts. No Contents API, no sparse checkout.
+
+Project Knowledge uploads are manual. `utilities/phc_knowledge_status.py` lists datafiles changed since the last upload; after uploading, run it with `mark` and commit `knowledge-status.txt`.
 
 ## Services
 
