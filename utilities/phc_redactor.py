@@ -95,13 +95,30 @@ log = logging.getLogger("phc_redactor")
 # Pillow with pillow-heif and EXIF orientation fix)
 # ---------------------------------------------------------------------------
 
+# pdfplumber emits "(cid:NN)" for glyphs whose font has no Unicode map. That
+# text is invisible to the model and the regexes but trivially decodable, so
+# any page containing it is re-read with OCR.
+_CID_RE = re.compile(r"\(cid:\d+\)")
+
+
+def _ocr_pdf_page(path: Path, page_no: int) -> str:
+    from pdf2image import convert_from_path
+    import pytesseract
+    images = convert_from_path(path, dpi=300, first_page=page_no, last_page=page_no)
+    return pytesseract.image_to_string(images[0]) if images else ""
+
+
 def extract_pdf_text(path: Path) -> str:
     import pdfplumber
     parts = []
     with pdfplumber.open(path) as pdf:
         log.info("  PDF has %d page(s)", len(pdf.pages))
         for i, page in enumerate(pdf.pages):
-            parts.append(f"--- Page {i+1} ---\n{page.extract_text() or ''}")
+            text = page.extract_text() or ""
+            if _CID_RE.search(text):
+                log.info("  Page %d has unmapped glyphs; using OCR", i + 1)
+                text = _ocr_pdf_page(path, i + 1)
+            parts.append(f"--- Page {i+1} ---\n{text}")
     return "\n\n".join(parts)
 
 
@@ -151,7 +168,7 @@ def extract_text(path: Path) -> str:
 # ---------------------------------------------------------------------------
 
 STRIP_TYPES = {"SSN", "Bank account number", "Routing number", "Card number",
-               "Street address", "Date of birth"}
+               "Street address", "Date of birth", "Postal barcode"}
 LAST4_TYPES = {"Medicare MBI", "Member ID", "Patient account number", "Group number"}
 ALL_TYPES = sorted(STRIP_TYPES | LAST4_TYPES)
 
@@ -237,6 +254,8 @@ _SAFETY_PATTERNS = [
         r"([A-Z0-9][A-Z0-9-]{3,}[A-Z0-9])\b")),
     ("Routing number", re.compile(
         r"(?i)\brouting(?:\s+transit)?\s*(?:number|no\.?|#)?\s*[:#]?\s*(\d{9})\b")),
+    # USPS Intelligent Mail barcode rendered as text: encodes ZIP+4 and delivery point
+    ("Postal barcode", re.compile(r"\b([ADFT]{65})\b")),
 ]
 _CARD_RE = re.compile(r"\b(\d(?:[ -]?\d){12,18})\b")
 
@@ -256,7 +275,7 @@ def find_by_regex(text: str) -> list:
     for kind, pattern in _SAFETY_PATTERNS:
         for m in pattern.finditer(text):
             v = m.group(1).strip()
-            if kind not in ("Date of birth",) and sum(c.isdigit() for c in v) < 4:
+            if kind not in ("Date of birth", "Postal barcode") and sum(c.isdigit() for c in v) < 4:
                 continue
             found.setdefault(v, {"value": v, "type": kind, "source": "regex"})
     for m in _CARD_RE.finditer(text):
