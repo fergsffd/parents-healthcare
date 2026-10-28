@@ -36,5 +36,7 @@ The full rules for handling an incoming document live in `project-instructions.m
 ## Sync
 Single git path (CJ chose this 2026-10-27): the deploy-key clone carries datafiles and scripts. `utilities/phc_knowledge_status.py` lists datafiles changed since the last Project Knowledge upload; `mark` records a new upload point in `knowledge-status.txt`. Uploads are manual: delete the old file, then upload the new one.
 
+`phc-autocommit.timer` commits and pushes `datafiles/*.md` and `knowledge-status.txt` on its own every 5 minutes. Commit other paths (scripts, docs) by hand as usual. Redacted input to process lives in NAS `processed/<patient>/`; `utilities/phc_redactor.py pending` lists what hasn't been logged yet.
+
 ## Working style
 CJ is technically fluent and terse. Do the work, surface conclusions, and ask only when something is genuinely ambiguous. If it's unclear which patient a document belongs to, ask rather than guess. At the end of every session, list every file created or modified and every unit installed or changed.

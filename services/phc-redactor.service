@@ -1,0 +1,19 @@
+[Unit]
+Description=PHC redactor: watches NAS inbox/<patient>/ and writes redacted text to processed/
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/mnt/Claude
+
+[Service]
+Type=simple
+WorkingDirectory=%h/myClaude/parents-healthcare/utilities
+ExecStart=%h/myClaude/parents-healthcare/utilities/venv/bin/python %h/myClaude/parents-healthcare/utilities/phc_redactor.py watch
+# Anthropic key is read from ~/.config/phc/anthropic_key by phc_keys.py
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=phc-redactor
+
+[Install]
+WantedBy=default.target

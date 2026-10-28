@@ -9,7 +9,8 @@ Fully separate from Chief of Staff (CoS): no shared repo, keys, folders, or serv
 ```
 parents-healthcare/
   datafiles/      karen.md william.md marlene.md providers.md paperless-status.md open-items.md
-  utilities/      phc_config_loader.py, phc_knowledge_status.py (redactor to come)
+  utilities/      phc_redactor.py, phc_autocommit.py, phc_knowledge_status.py,
+                  phc_config_loader.py, phc_keys.py, venv/ (gitignored)
   services/       reference copies of systemd units (installed units: ~/.config/systemd/user)
   phc-config.yaml per-host config, no secrets
   project-instructions.md   rules for processing an incoming document
@@ -53,7 +54,13 @@ Project Knowledge uploads are manual. `utilities/phc_knowledge_status.py` lists 
 
 ## Services
 
-None installed yet. Planned: `phc-redactor` (watch `inbox/*/`, OCR + redact into `processed/`).
+Unit files live in `services/`; install by copying to `~/.config/systemd/user/`.
+
+**`phc-redactor.service`** runs `phc_redactor.py watch`. It polls `inbox/{karen,william,marlene,unsorted}/` every 5 s for PDFs and photos (JPG/PNG/HEIC/TIFF), extracts text (pdfplumber, OCR fallback via tesseract, EXIF rotation, HEIC via pillow-heif in the venv), and finds identifiers with the Claude API (`claude-opus-5-5`, structured JSON output, server-side refusal fallback) plus a regex safety net. Policy is enforced in code: guards keep dates of service, claim/NPI/reference numbers, and dollar amounts even if the model mislabels them. Output goes to `processed/<patient>/<name>.redacted.txt` with a header (patient, source, sender, doc type, doc date, redaction list). Sources move to `originals/<patient>/`; failures to `failed/<patient>/` with a `.error.txt`. `phc_redactor.py pending` lists outputs not yet logged; `mark-reviewed <patient>/<file>` clears one. Logs: `~/.local/state/phc/logs/`.
+
+Needs `~/.config/phc/anthropic_key` (chmod 600), separate from the CoS key file.
+
+**`phc-autocommit.timer`** runs `phc_autocommit.py` every 5 minutes. It commits and pushes only `datafiles/*.md` and `knowledge-status.txt`, by explicit path. It waits until files have been quiet for 90 s, and refuses (unit fails) if a changed file contains an SSN, full MBI, or labeled full DOB. `--dry-run` shows what it would do.
 
 ## Git hygiene
 

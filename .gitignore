@@ -34,3 +34,6 @@ venv/
 # OS cruft
 .DS_Store
 @eaDir/
+
+# Claude Code local settings
+.claude/settings.local.json
