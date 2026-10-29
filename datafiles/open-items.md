@@ -12,7 +12,8 @@
 | 8 | Karen | Cyclosporine eye drops cost $214.39/fill: check tier/coverage under Topaz 2027 and Zing; ask doctor about lower-cost alternatives or manufacturer/Extra Help options | 2026-12-07 | open | Drives plan choice. 2026 Part D OOP cap is $2,100. |
 | 9 | Karen | Ask Karen about overdue refills: cyclosporine (due 2026-07-27), famotidine (2026-09-22), cetirizine (2026-10-10) | | open | May have stopped cyclosporine over cost, or buying OTC. |
 | 10 | Karen | Montelukast has 0 refills left; get a new prescription | 2026-11-19 | open | Fill at CVS #11155. |
-| 11 | Karen | Get current plan documents: Topaz 2027 ANOC + drug list, Zing Select Care 2027 SOB + drug list + provider directory, Topaz 2026 EOC | 2026-12-07 | open | EOC on file is 2016, SOB is 2020; both superseded. Drop website PDFs in inbox/reference/. |
+| 11 | Karen | Get current plan documents: Topaz 2027 ANOC + drug list, Zing Select Care 2027 SOB + drug list + provider directory | 2026-12-07 | in progress | 2026 EOC and 2026 Member Handbook on file (2026-10-29). Drop website PDFs in inbox/reference/. |
+| 12 | Karen | Confirm whether Karen enrolled in and used Sword Health (virtual PT program); find out why its two $500 claims (2026-02-26, 2026-03-16) appear reversed | | open | Quarterly YTD totals drop $1,000 billed / $980 paid vs. Q1 + Q2. Check SummaCare claims history alongside item #7. Possible billing error if she never used it. |
 
 ## Closed
 | # | Patient | Item | Closed | Outcome |
