@@ -15,6 +15,9 @@ Modeled on the CoS redactor, with a healthcare redaction profile:
 
 Sources move to originals/<patient>/ on success, failed/<patient>/ on failure.
 Files in inbox/unsorted/ are processed with patient UNKNOWN for CJ to assign.
+A file identical (by SHA-256) to one already in originals/<folder>/ is not
+reprocessed: it moves to failed/<folder>/ with a note naming the match. To
+reprocess on purpose, use `phc_redactor.py file <path>`.
 Files in inbox/reference/ (public plan documents downloaded from a website:
 ANOC, EOC, Summary of Benefits, drug lists) skip the Claude API: text is
 extracted and only the regex safety net runs. Mailed copies with an address
@@ -534,6 +537,41 @@ def _candidates() -> list[tuple[Path, str]]:
     return found
 
 
+_hash_cache: dict[tuple, str] = {}
+
+
+def _sha256(path: Path) -> str:
+    st = path.stat()
+    key = (str(path), st.st_size, st.st_mtime)
+    if key not in _hash_cache:
+        _hash_cache[key] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return _hash_cache[key]
+
+
+def _duplicate_of(path: Path, folder: str) -> Path | None:
+    """An archived original with the same content as path, if any."""
+    d = CONFIG["originals_dir"] / folder
+    if not d.is_dir():
+        return None
+    h = _sha256(path)
+    for p in d.iterdir():
+        if p.is_file() and p.stat().st_size == path.stat().st_size and _sha256(p) == h:
+            return p
+    return None
+
+
+def _set_aside_duplicate(path: Path, folder: str, original: Path):
+    fail_dir = CONFIG["failed_dir"] / folder
+    fail_dir.mkdir(parents=True, exist_ok=True)
+    dest = unique_path(fail_dir, path.name)
+    shutil.move(str(path), str(dest))
+    with open(dest.with_name(dest.name + ".error.txt"), "w") as f:
+        f.write(f"{datetime.now():%Y-%m-%d %H:%M:%S}  Duplicate of "
+                f"originals/{folder}/{original.name}; not reprocessed\n")
+    log.info("Duplicate of originals/%s/%s; moved to failed/%s/%s", folder,
+             safe_name(original.name), folder, safe_name(dest.name))
+
+
 def _file_stable(path: Path) -> bool:
     try:
         s1 = path.stat().st_size
@@ -551,8 +589,12 @@ def watch_mode():
             try:
                 if not _file_stable(path):
                     continue
-                h = hashlib.sha256(path.read_bytes()).hexdigest()
-                if h in seen:
+                original = _duplicate_of(path, folder)
+                if original:
+                    _set_aside_duplicate(path, folder, original)
+                    continue
+                h = _sha256(path)
+                if h in seen:  # processed this run but couldn't be moved out of the inbox
                     continue
                 seen.add(h)
                 process_file(path, folder)
@@ -566,7 +608,11 @@ def once_mode():
     if not items:
         log.info("Nothing in inbox.")
     for path, folder in items:
-        process_file(path, folder)
+        original = _duplicate_of(path, folder)
+        if original:
+            _set_aside_duplicate(path, folder, original)
+        else:
+            process_file(path, folder)
 
 
 def list_pending():
