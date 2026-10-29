@@ -15,6 +15,10 @@ Modeled on the CoS redactor, with a healthcare redaction profile:
 
 Sources move to originals/<patient>/ on success, failed/<patient>/ on failure.
 Files in inbox/unsorted/ are processed with patient UNKNOWN for CJ to assign.
+Files in inbox/reference/ (public plan documents downloaded from a website:
+ANOC, EOC, Summary of Benefits, drug lists) skip the Claude API: text is
+extracted and only the regex safety net runs. Mailed copies with an address
+on them belong in the patient's folder, since regex doesn't catch addresses.
 
 Usage:
     phc_redactor.py watch                 # poll all inbox folders continuously
@@ -68,6 +72,10 @@ CONFIG = {
     "pdf_extensions":    [".pdf"],
     "image_extensions":  [".jpg", ".jpeg", ".png", ".heic", ".heif", ".tif", ".tiff"],
 }
+
+# Inbox folder for public documents: text extraction + regex only, no API calls
+REFERENCE = "reference"
+FOLDERS = PATIENTS + ["unsorted", REFERENCE]
 
 DOC_TYPES = ["EOB", "MSN", "bill", "statement", "notice", "results",
              "plan materials", "other"]
@@ -450,21 +458,23 @@ def unique_path(directory: Path, name: str) -> Path:
 # ---------------------------------------------------------------------------
 
 def process_file(path: Path, patient: str) -> bool:
-    label = patient if patient in PATIENTS else "UNKNOWN"
-    folder = patient if patient in PATIENTS else "unsorted"
+    reference = patient == REFERENCE
+    label = patient.upper() if reference else patient if patient in PATIENTS else "UNKNOWN"
+    folder = patient if patient in PATIENTS or reference else "unsorted"
     log.info("Processing [%s] %s", label, safe_name(path.name))
     try:
         text = extract_text(path)
         if not text.strip():
             raise ValueError("no text extracted")
-        model_items, complete = detect_identifiers(text)
+        model_items, complete = ([], True) if reference else detect_identifiers(text)
         items = _enforce_policy(model_items + find_by_regex(text), text)
         dedup = {}
         for it in items:
             dedup.setdefault(it["value"], it)
         items = list(dedup.values())
         redacted, n = redact_text(text, items)
-        meta = detect_metadata(redacted)
+        meta = ({"sender": "unknown", "document_type": "plan materials",
+                 "document_date": "unknown"} if reference else detect_metadata(redacted))
         log.info("  %d identifier(s), %d replacement(s); %s %s from %s",
                  len(items), n, meta["document_type"], meta["document_date"], meta["sender"])
 
@@ -478,6 +488,8 @@ def process_file(path: Path, patient: str) -> bool:
             f.write(f"# Document type: {meta['document_type']}\n")
             f.write(f"# Document date: {meta['document_date']}\n")
             f.write(f"# Processed: {datetime.now():%Y-%m-%d %H:%M:%S}\n")
+            if reference:
+                f.write("# Reference document: regex safety net only, not scanned by Claude.\n")
             if not complete:
                 f.write("# WARNING: model scan incomplete; only regex safety net covered "
                         "part of this text. Review before use.\n")
@@ -513,7 +525,7 @@ def process_file(path: Path, patient: str) -> bool:
 def _candidates() -> list[tuple[Path, str]]:
     exts = set(CONFIG["pdf_extensions"] + CONFIG["image_extensions"])
     found = []
-    for folder in PATIENTS + ["unsorted"]:
+    for folder in FOLDERS:
         d = CONFIG["inbox_dir"] / folder
         if d.is_dir():
             for p in sorted(d.iterdir()):
@@ -532,7 +544,7 @@ def _file_stable(path: Path) -> bool:
 
 
 def watch_mode():
-    log.info("Watching %s/{%s}", CONFIG["inbox_dir"], ",".join(PATIENTS + ["unsorted"]))
+    log.info("Watching %s/{%s}", CONFIG["inbox_dir"], ",".join(FOLDERS))
     seen = set()
     while True:
         for path, folder in _candidates():
@@ -590,7 +602,7 @@ def main():
     p_file = sub.add_parser("file")
     p_file.add_argument("path")
     p_file.add_argument("--patient", default="unsorted",
-                        choices=PATIENTS + ["unsorted"])
+                        choices=FOLDERS)
     sub.add_parser("pending")
     p_rev = sub.add_parser("mark-reviewed")
     p_rev.add_argument("name", help="name as shown by `pending`, e.g. karen/x.redacted.txt")

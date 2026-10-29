@@ -29,6 +29,8 @@ parents-healthcare/
 ```
 /mnt/Claude/parents-healthcare/
   inbox/{karen,william,marlene,unsorted}/   drop scans here; folder sets the patient
+  inbox/reference/   public plan docs downloaded from a website (ANOC, EOC, SOB, drug lists):
+                     text + regex safety net only, no Claude API calls
   originals/    untouched sources, moved here after processing
   processed/    redacted text output for Claude
   failed/       anything OCR/redaction couldn't handle
@@ -56,7 +58,7 @@ Project Knowledge uploads are manual. `utilities/phc_knowledge_status.py` lists 
 
 Unit files live in `services/`; install by copying to `~/.config/systemd/user/`.
 
-**`phc-redactor.service`** runs `phc_redactor.py watch`. It polls `inbox/{karen,william,marlene,unsorted}/` every 5 s for PDFs and photos (JPG/PNG/HEIC/TIFF), extracts text (pdfplumber, OCR fallback via tesseract, EXIF rotation, HEIC via pillow-heif in the venv), and finds identifiers with the Claude API (`claude-opus-5-5`, structured JSON output, server-side refusal fallback) plus a regex safety net. Policy is enforced in code: guards keep dates of service, claim/NPI/reference numbers, and dollar amounts even if the model mislabels them. Output goes to `processed/<patient>/<name>.redacted.txt` with a header (patient, source, sender, doc type, doc date, redaction list). Sources move to `originals/<patient>/`; failures to `failed/<patient>/` with a `.error.txt`. `phc_redactor.py pending` lists outputs not yet logged; `mark-reviewed <patient>/<file>` clears one. Logs: `~/.local/state/phc/logs/`.
+**`phc-redactor.service`** runs `phc_redactor.py watch`. It polls `inbox/{karen,william,marlene,unsorted,reference}/` every 5 s for PDFs and photos (JPG/PNG/HEIC/TIFF), extracts text (pdfplumber, OCR fallback via tesseract, EXIF rotation, HEIC via pillow-heif in the venv), and finds identifiers with the Claude API (`claude-opus-5-5`, structured JSON output, server-side refusal fallback) plus a regex safety net. Policy is enforced in code: guards keep dates of service, claim/NPI/reference numbers, and dollar amounts even if the model mislabels them. Output goes to `processed/<patient>/<name>.redacted.txt` with a header (patient, source, sender, doc type, doc date, redaction list). `inbox/reference/` skips the API (no model scan, no metadata call) and writes to `processed/reference/`; mailed copies with an address on them go in the patient folder instead, because regex doesn't catch addresses. Sources move to `originals/<patient>/`; failures to `failed/<patient>/` with a `.error.txt`. `phc_redactor.py pending` lists outputs not yet logged; `mark-reviewed <patient>/<file>` clears one. Logs: `~/.local/state/phc/logs/`.
 
 Needs `~/.config/phc/anthropic_key` (chmod 600), separate from the CoS key file.
 

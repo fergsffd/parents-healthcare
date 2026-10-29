@@ -11,7 +11,7 @@ The full rules for handling an incoming document live in `project-instructions.m
 - `utilities/`: scripts (`phc_redactor.py`, sync, config loader)
 - `services/`: reference copies of systemd unit files. The installed units are in `~/.config/systemd/user`.
 - `phc-config.yaml`: per-host config. It contains no secrets.
-- NAS root: `/mnt/Claude/parents-healthcare/` with subfolders `inbox/{karen,william,marlene,unsorted}`, `originals/`, `processed/`, `failed/`
+- NAS root: `/mnt/Claude/parents-healthcare/` with subfolders `inbox/{karen,william,marlene,unsorted,reference}`, `originals/`, `processed/`, `failed/`
 - Secrets: `~/.config/phc/` (chmod 600). Deploy key: `~/.ssh/id_ed25519_phc`
 
 ## Hard rules
