@@ -27,4 +27,4 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 | Medicare.gov (MSNs) | — | — | — | |
 | Plan (TBD) | — | — | — | |
 | Part D plan (TBD) | — | — | — | |
-| Social Security (my Social Security) | — | — | — | |
+| Social Security (my Social Security) | acct | — | — | Account exists (reported); BEV letter downloaded 2026-11-08. Next: confirm CJ has the login, then turn off paper notices where SSA allows it. |
