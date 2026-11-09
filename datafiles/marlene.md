@@ -24,7 +24,9 @@ Birth year: 1937 (confirmed, SSA letter 2026-11-08)
 | Provider portal proxy access | | | see providers.md |
 
 ## Accounts
-- Google account set up (primarily for medical records management)
+- Google account: mightymimi17@gmail.com (primarily for medical records management; reported 2026-11-08)
+- Gmail forwarding to CJ (fergsffd@gmail.com), labeled `PHC/Marlene`: being set up 2026-11-08 (see open-items #13)
+- CJ holds the my Social Security login (reported 2026-11-08)
 
 ## Providers
 See `providers.md` (tag: Marlene).
