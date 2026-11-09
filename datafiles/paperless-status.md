@@ -19,7 +19,7 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 | Medicare.gov (MSNs) | — | — | — | |
 | Plan (TBD) | — | — | — | |
 | Part D plan (TBD) | — | — | — | |
-| Social Security (my Social Security) | — | — | — | |
+| Social Security (my Social Security) | acct | proxy | — | Account exists. CJ holds William's own login (reported 2026-11-08). Next: switch notices to online-only where SSA allows it; download a BEV letter to confirm his MBI and Part B withholding. |
 
 ## Marlene
 | Sender | Account | CJ access | Paperless | Notes |
@@ -27,4 +27,4 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 | Medicare.gov (MSNs) | — | — | — | |
 | Plan (TBD) | — | — | — | |
 | Part D plan (TBD) | — | — | — | |
-| Social Security (my Social Security) | acct | — | — | Account exists (reported); BEV letter downloaded 2026-11-08. Next: confirm CJ has the login, then turn off paper notices where SSA allows it. |
+| Social Security (my Social Security) | acct | proxy | — | Account exists. CJ holds Marlene's own login (reported 2026-11-08). BEV letter downloaded 2026-11-08. Next: switch notices to online-only where SSA allows it. |
