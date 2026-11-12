@@ -292,7 +292,18 @@ _SAFETY_PATTERNS = [
     # USPS Intelligent Mail barcode rendered as text: encodes ZIP+4 and delivery point
     ("Postal barcode", re.compile(r"\b([ADFT]{65})\b")),
 ]
-_CARD_RE = re.compile(r"\b(\d(?:[ -]?\d){12,18})\b")
+# Contiguous 13-19 digits, or the printed groupings real cards use (4-4-4-4[-3], Amex 4-6-5).
+# A loose "digit, optional space" pattern chained unrelated fields (a year, claim number,
+# and pharmacy ID on one table row) into Luhn-valid runs and wiped out claim data.
+_CARD_RE = re.compile(
+    r"(?<![\d-])(\d{13,19}"
+    r"|\d{4}([ -])\d{4}\2\d{4}\2\d{4}(?:\2\d{3})?"
+    r"|\d{4}([ -])\d{6}\3\d{5})(?![\d-])")
+# Issuer prefixes (IIN) for Visa, Mastercard, Amex, Discover, Diners, JCB, UnionPay.
+# Medicare/plan claim numbers (e.g. 13-digit Part B claims starting 01-11) fall outside these.
+_CARD_IIN_RE = re.compile(
+    r"^(?:4|5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d\d|27[01]\d|2720|3[47]|3(?:0[0-5]|[68])"
+    r"|6011|64[4-9]|65|35(?:2[89]|[3-8]\d)|62)")
 
 
 def _luhn_ok(digits: str) -> bool:
@@ -315,7 +326,7 @@ def find_by_regex(text: str) -> list:
             found.setdefault(v, {"value": v, "type": kind, "source": "regex"})
     for m in _CARD_RE.finditer(text):
         digits = re.sub(r"\D", "", m.group(1))
-        if 13 <= len(digits) <= 19 and _luhn_ok(digits):
+        if 13 <= len(digits) <= 19 and _CARD_IIN_RE.match(digits) and _luhn_ok(digits):
             found.setdefault(m.group(1), {"value": m.group(1), "type": "Card number",
                                           "source": "regex"})
     return list(found.values())
