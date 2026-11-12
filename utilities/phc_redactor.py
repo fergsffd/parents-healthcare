@@ -111,6 +111,25 @@ log = logging.getLogger("phc_redactor")
 # any page containing it is re-read with OCR.
 _CID_RE = re.compile(r"\(cid:\d+\)")
 
+# Some fonts carry a wrong Unicode map instead of none: pdfplumber returns
+# dots and punctuation with no "(cid:NN)" marker, and the page isn't sparse.
+# Real pages measured 0.22-0.99 alphanumeric (dot-leader TOCs are the low end);
+# garbled ones 0.01-0.16. Below the threshold, OCR the page and keep whichever
+# text has more alphanumerics, so a borderline real page can't get worse.
+_GARBLED_MIN_CHARS = 50
+_GARBLED_MAX_ALNUM = 0.30
+
+
+def _alnum_count(text: str) -> int:
+    return sum(c.isalnum() for c in text)
+
+
+def _looks_garbled(text: str) -> bool:
+    visible = [c for c in text if not c.isspace()]
+    if len(visible) < _GARBLED_MIN_CHARS:
+        return False
+    return _alnum_count(visible) / len(visible) < _GARBLED_MAX_ALNUM
+
 
 def _ocr_pdf_page(path: Path, page_no: int) -> str:
     from pdf2image import convert_from_path
@@ -129,6 +148,11 @@ def extract_pdf_text(path: Path) -> str:
             if _CID_RE.search(text):
                 log.info("  Page %d has unmapped glyphs; using OCR", i + 1)
                 text = _ocr_pdf_page(path, i + 1)
+            elif _looks_garbled(text):
+                ocr = _ocr_pdf_page(path, i + 1)
+                if _alnum_count(ocr) > _alnum_count(text):
+                    log.info("  Page %d text looks garbled (bad font map); using OCR", i + 1)
+                    text = ocr
             parts.append(f"--- Page {i+1} ---\n{text}")
     return "\n\n".join(parts)
 
@@ -503,6 +527,9 @@ def process_file(path: Path, patient: str) -> bool:
             f.write(redacted)
     except Exception as e:
         log.exception("  Failed: %s", e)
+        if path.parent.resolve() == (CONFIG["originals_dir"] / folder).resolve():
+            log.info("  Archived original left in place")
+            return False
         fail_dir = CONFIG["failed_dir"] / folder
         fail_dir.mkdir(parents=True, exist_ok=True)
         dest = unique_path(fail_dir, path.name)
@@ -513,10 +540,14 @@ def process_file(path: Path, patient: str) -> bool:
         return False
 
     orig_dir = CONFIG["originals_dir"] / folder
-    orig_dir.mkdir(parents=True, exist_ok=True)
-    dest = unique_path(orig_dir, path.name)
-    shutil.move(str(path), str(dest))
-    log.info("  Output: processed/%s/%s; original archived", folder, out_path.name)
+    if path.parent.resolve() == orig_dir.resolve():
+        # Reprocessing an archived original via `file`: leave it where it is
+        log.info("  Output: processed/%s/%s; original already archived", folder, out_path.name)
+    else:
+        orig_dir.mkdir(parents=True, exist_ok=True)
+        dest = unique_path(orig_dir, path.name)
+        shutil.move(str(path), str(dest))
+        log.info("  Output: processed/%s/%s; original archived", folder, out_path.name)
     with open(CONFIG["pending_log"], "a") as f:
         f.write(f"{datetime.now():%Y-%m-%d %H:%M:%S}  PENDING   {folder}/{out_path.name}\n")
     return True
