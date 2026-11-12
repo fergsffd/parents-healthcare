@@ -3,7 +3,8 @@
 | # | Patient | Item | Due | Status | Notes |
 |---|---|---|---|---|---|
 | 1 | Karen | Decide 2027 Medicare Advantage plan: stay on SummaCare Topaz or switch to Zing Select Care | 2026-12-07 | in progress | Annual Enrollment Period closes Dec 7. Check her providers and drugs against each plan's network and formulary. Deciding factor is likely cyclosporine eye-drop coverage ($214.39/fill now). Medicare.gov Plan Finder can compare with her drugs + pharmacies. |
-| 2 | All | Identify current plans and member IDs (last 4) for William and Marlene | | open | Fill in profiles. Marlene: MBI last 4 (XU91) and Part A/B dates confirmed 2026-11-08. Plan name still unknown. |
+| 2 | All | Identify current plans and member IDs (last 4) for William and Marlene | | open | Fill in profiles. Marlene: MBI last 4 (XU91) and Part A/B dates confirmed 2026-11-08. She's on Original Medicare + Anthem Blue Cross Medicare Supplement, member ID last 4 8091 (EOB 2026-10-30). Still need: her Medigap plan letter (from her card or Anthem) and her Part D plan. William: nothing yet. |
+| 14 | Marlene | Match Anthem EOB claim 329974339900 (William M. Carrera, DOS 2026-10-02, $0 patient responsibility) to the Carrera bill and the Medicare MSN | | open | Plan says Marlene owes $0.00. A bill for any amount would be an error. Switch Anthem EOBs to paperless (see paperless-status.md). |
 | 3 | All | Get CJ set up as Medicare authorized rep (CMS-10106) for each parent | | open | |
 | 4 | All | Create Medicare.gov accounts and switch to electronic MSNs | | open | Use the Google accounts for W&M |
 | 5 | All | Inventory current providers and request portal proxy access | | open | Populate providers.md |

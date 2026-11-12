@@ -8,6 +8,8 @@ One row per provider. A provider seeing more than one patient gets one row with 
 | Karl Luketic / Luketic Eye Center LLC | ophthalmology (likely; confirm) | Karen | | | — | yes (plan paid in-network, EOB 2026-10-12) | 2026-09-28 optical biometry (92136) |
 | Sword Health Inc | digital physical therapy / disease management program | Karen | | | — | yes (plan paid, EOBs 2026-03-09, 2026-03-25) | 2026-02-26 initial (S0315), 2026-03-16 per diem (S0317). Claims apparently reversed in Q2; confirm whether Karen used it. |
 
+| William M. Carrera | unknown (2026-10-02 claim has medicine + surgery + $4.2k drug lines, a pattern consistent with an in-office injection procedure; confirm) | Marlene | | | — | accepts Medicare assignment (Anthem EOB 2026-10-30) | DOS 2026-10-02, claim 329974339900, patient acct last 4 918A |
+
 ## Pharmacies
 | Pharmacy | Patient(s) | Mail-order? | Auto-refill? | Notes |
 |---|---|---|---|---|
