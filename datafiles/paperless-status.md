@@ -18,7 +18,7 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 |---|---|---|---|---|
 | Medicare.gov (MSNs) | — | — | — | |
 | Plan (TBD) | — | — | — | |
-| Part D plan (TBD) | — | — | — | |
+| Wellcare Value Script (Part D, from 2027-01-01) | — | — | — | Paper enrollment letter received 2026-10-29. Next: register at wellcare.com (Login/Register), set paperless delivery, and use hawkeye1sv@ as the email. |
 | Social Security (my Social Security) | acct | proxy | — | Account exists. CJ holds William's own login (reported 2026-11-08). Next: switch notices to online-only where SSA allows it; download a BEV letter to confirm his MBI and Part B withholding. |
 
 ## Marlene
@@ -26,5 +26,5 @@ Statuses: `—` not started · `acct` online account created · `proxy` CJ has p
 |---|---|---|---|---|
 | Medicare.gov (MSNs) | — | — | — | |
 | Anthem Blue Cross Medicare Supplement (EOBs) | — | — | — | Paper EOB received: 2026-10-30 (claim 329974339900). Next: create or log in to an account at anthem.com/ca, then go to Profile > Email Preferences, set Primary Email Address (use mightymimi17@ so mail forwards to PHC/Marlene), and Save/Update. Ask about adding CJ as authorized rep. Member Services 800-333-3883. |
-| Part D plan (TBD) | — | — | — | |
+| Wellcare Value Script (Part D, from 2027-01-01) | — | — | — | Paper enrollment letter received 2026-10-29. Next: register at wellcare.com (Login/Register), set paperless delivery, and use mightymimi17@ as the email. |
 | Social Security (my Social Security) | acct | proxy | — | Account exists. CJ holds Marlene's own login (reported 2026-11-08). BEV letter downloaded 2026-11-08. Next: switch notices to online-only where SSA allows it. |

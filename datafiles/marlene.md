@@ -9,7 +9,7 @@ Birth year: 1937 (confirmed, SSA letter 2026-11-08)
 | Plan name | Anthem Blue Cross Medicare Supplement (Medigap). The EOB doesn't name the plan letter | confirmed (Anthem EOB 2026-10-30) |
 | Member ID (last 4) | 8091 (Anthem) | confirmed (Anthem EOB 2026-10-30) |
 | Medicare MBI (last 4) | XU91 | confirmed (SSA BEV 2026-11-08) |
-| Part D | | |
+| Part D | Wellcare Value Script (PDP) S4802-163, effective 2027-01-01. RxID last 4 2567, RxGroup last 4 2FGA, BIN 610014, PCN MEDDPRIME. Application 216252258 received 2026-10-25. Premium $66.90/mo = $5.30 plan + **$61.60 late-enrollment penalty** (LEP carried over from a prior plan). Payment method (SS withholding vs. billed) unknown. Member Services 888-550-5252. 2026 Part D plan: unknown | confirmed (Wellcare enrollment letter 2026-10-29) |
 | Supplemental / Medigap | Anthem Blue Cross Medicare Supplement. Member Services 800-333-3883 (Mon–Fri 8–6). Appeals: Medicare Grievance & Appeals, PO Box 4310, Woodland Hills CA 91367 (180 days). Foreign travel benefit: $250 deductible, $50,000 lifetime max | confirmed (Anthem EOB 2026-10-30) |
 | Part B premium | $202.90/mo withheld from Social Security (2026); $185.00/mo in 2025. Both equal the standard Part B premium, so no IRMAA, and no plan premium is being withheld | confirmed (SSA BEV 2026-11-08) |
 | Social Security | Retirement benefit. Gross $1,565.90/mo, net $1,363.00 (from 2025-12). Prior year gross $1,523.30, net $1,338.00. Paid around the 3rd Wednesday of each month | confirmed (SSA BEV 2026-11-08) |
@@ -38,5 +38,6 @@ See `providers.md` (tag: Marlene).
 ## Communications log
 | Date | Sender | Type | Summary | Action |
 |---|---|---|---|---|
+| 2026-10-29 | Wellcare | Part D enrollment confirmation | Enrolled in Wellcare Value Script (PDP) effective 2027-01-01. Total premium $66.90/mo, which includes a $61.60 LEP. The letter doubles as proof of coverage until the ID card arrives | See open-items #15 (LEP and Extra Help) and #16 (prior plan and payment method). Watch for the ID card. |
 | 2026-11-08 | Social Security Administration | Benefit Verification Letter (BNC# 26EF994J90528) | Benefit amounts for 2025 and 2026; Part B withholding of $202.90/mo; Medicare A and B since 2002-08; MBI ending XU91 | None. Keep it on file as income/coverage proof (useful for Extra Help or MSP applications). |
 | 2026-10-30 | Anthem Blue Cross (Medicare Supplement) | EOB, claim 329974339900 | William M. Carrera, DOS 2026-10-02, claim received 2026-10-27. Medicine $154.24, Surgery $668.55, Drugs $4,229.40 = charged $5,052.19. Patient savings $2,985.54, so allowed $2,066.65. Medicare paid $1,646.60 and Anthem paid $420.05. Marlene owes **$0.00**. Patient acct last 4: 918A | Awaiting bill. Any bill from Carrera for this DOS should be $0. The Medicare MSN for this claim should arrive separately; match it when it does. |
